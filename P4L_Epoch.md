@@ -183,10 +183,8 @@ No more changes needed in this file. RESTORE TO THE NORMAL REMOVES.SQF
 ALL THREE OF THESE FILES NEED THE SAME EDIT, MAKE SURE YOU DO ALL FILES!!!!<br>
 Find
 	
-	_friendlies		= player getVariable ["friendlyTo",[]];
-	// check if friendly to owner
-	if(_ownerID in _friendlies) then {
-		_canBuildOnPlot = true;
+	if ((_isowner) || (_isfriendly)) then {
+		_canBuildOnPlot = true;		
 	};
 
 Replace that with
@@ -198,8 +196,8 @@ Replace that with
 		  _fuid  =  _fuid  + [_friendUID];
 	} forEach _friendlies;
 	_builder  = getPlayerUID player;
-	// check if friendly to owner
-	if(_builder in _fuid) then {
+	
+	if ((_isowner) || (_isfriendly) || (_builder in _fuid)) then {
 		_canBuildOnPlot = true;
 	};	
 
@@ -212,7 +210,7 @@ Find
 After that, add
 
 	if (typeOf (_object) == "Plastic_Pole_EP1_DZ") then {
-	_object setVariable ["plotfriends", _intentory, true];
+	_object setVariable ["plotfriends", _inventory, true];
 	};
 	
 **8 B**<br>
@@ -222,7 +220,7 @@ Find
 	
 Replace that with
 
-	if ((count _intentory > 0) && !(typeOf( _object) == "Plastic_Pole_EP1_DZ")) then {
+	if ((count _inventory > 0) && !(typeOf( _object) == "Plastic_Pole_EP1_DZ")) then {
 	
 **STEP 9 Again, this is in your dayz_server.pbo (Modifying server_updateObject.sqf)**<br>
 Find
