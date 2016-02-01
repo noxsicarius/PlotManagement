@@ -52,11 +52,11 @@ Find
 
 	if (s_player_maintain_area < 0) then {
 	
-Above that, add
+Directly above that, add
 
 	if (s_player_plotManagement < 0) then {
 		_adminList = ["0152"]; // Add admins here if you admins to able to manage all plotpoles
-		_owner = _cursorTarget getVariable ["CharacterID","0"];
+		_owner = _cursorTarget getVariable ["ownerPUID","0"];
 		_friends = _cursorTarget getVariable ["plotfriends", []];
 		_fuid = [];
 		{
@@ -65,7 +65,7 @@ Above that, add
 		} forEach _friends;
 		_allowed = [_owner];    
 		_allowed = [_owner] + _adminList + _fuid;
-		if(_owner == dayz_characterID || (getPlayerUID player) in _allowed)then{            
+		if((getPlayerUID player) in _allowed)then{            
 		s_player_plotManagement = player addAction ["<t color='#0059FF'>Manage Plot</t>", "plotManagement\initPlotManagement.sqf", [], 5, false];
 		};
 	};
@@ -95,13 +95,13 @@ Replace that with
 Find
 	
 	//Allow owners to delete modulars
-        if(_isModular && (dayz_characterID == _ownerID)) then {
+        if(_isModular && (_playerUID == _ownerID)) then {
                 if(_hasToolbox && "ItemCrowbar" in _itemsPlayer) then {
                         _player_deleteBuild = true;
                 };
         };
 	//Allow owners to delete modular doors without locks
-        if(_isModularDoor && (dayz_characterID == _ownerID)) then {
+        if(_isModularDoor && (_playerUID == _ownerID)) then {
                 if(_hasToolbox && "ItemCrowbar" in _itemsPlayer) then {
                         _player_deleteBuild = true;
                 };      
@@ -126,7 +126,7 @@ Replace that with
 					} forEach _friends;
 					_allowed = [_owner];    
 					_allowed = [_owner] +  _fuid;	
-					if ( _playerUID in _allowed && _ownerID in _allowed ) then {  // // If u want that the object also belongs to someone on the plotpole.
+					if ( _playerUID in _allowed && _ownerID in _allowed ) then {  
 						_player_deleteBuild = true;
 					};					
 				}else{
@@ -153,7 +153,7 @@ Replace that with
 					} forEach _friends;
 					_allowed = [_owner];    
 					_allowed = [_owner] +  _fuid;	
-					if ( _playerUID in _allowed && _ownerID in _allowed) then { //  // If u want that the object also belongs to someone on the plotpole.
+					if ( _playerUID in _allowed && _ownerID in _allowed) then {
 						_player_deleteBuild = true;
 					};					
 				}else{
@@ -175,16 +175,9 @@ After that, add
 	player removeAction s_player_plotManagement;
 	s_player_plotManagement = -1;
 	
-**5 E**
-Remember to change the paths to any files you've moved to your mission folder!
-
-	player_upgrade.sqf
-	player_buildingDowngrade.sqf
-	player_upgrade.sqf"
-	
 **STEP 6 (Modifying remove.sqf)**<br>
 
-NO CHANGES NEEDED, the effect has been realised in 5 C. RESTORE TO THE NORMAL REMOVES.SQF
+No more changes needed in this file. RESTORE TO THE NORMAL REMOVES.SQF
 	
 **STEP 7 (Modifying player_build.sqf, player_upgrade.sqf, and player_buildingDowngrade.sqf)**<br>
 ALL THREE OF THESE FILES NEED THE SAME EDIT, MAKE SURE YOU DO ALL FILES!!!!<br>
@@ -208,7 +201,7 @@ Replace that with
 	// check if friendly to owner
 	if(_builder in _fuid) then {
 		_canBuildOnPlot = true;
-	};
+	};	
 
 **STEP 8 This one is in your dayz_server.pbo (Modifying server_monitor.sqf)**<br>
 **8 A**<br>
