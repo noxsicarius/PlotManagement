@@ -5,9 +5,9 @@ By Zupa and Rosska85<br><br>
 Installation
 ============
 **Non Plot for Life**<br>
-[Instructions found here] (https://github.com/DevZupa/PlotManagement/blob/master/Modded_Epoch.md)<br>
+[Instructions found here] (https://github.com/noxsicarius/PlotManagement/blob/master/Modded_Epoch.md)<br>
 **If you're running Plot for Life**<br>
-[Instructions found here] (https://github.com/DevZupa/PlotManagement/blob/master/P4L_Epoch.md)<br><br>
+[Instructions found here] (https://github.com/noxsicarius/PlotManagement/blob/master/P4L_Epoch.md)<br><br>
 
 These instructions are pretty much identical, but PlotForLife uses a different variable for owners which persists through death.
 
