@@ -555,6 +555,12 @@ if (isNil "DZE_snapExtraRange") then {
 if (isNil "DZE_PlotOwnership") then {
 	DZE_PlotOwnership = false;
 };
+if(isNil "DZE_APlotforLife") then {
+	DZE_APlotforLife = true;
+};
+if(isNil "DZE_modularBuild") then {
+	DZE_modularBuild = true;
+};
 if (isNil "DZE_checkNearbyRadius") then {
 	DZE_checkNearbyRadius = 30;
 };
