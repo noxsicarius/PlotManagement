@@ -1,4 +1,4 @@
-private ["_nul","_result","_pos","_wsDone","_dir","_isOK","_countr","_objWpnTypes","_objWpnQty","_dam","_selection","_totalvehicles","_object","_idKey","_type","_ownerID","_worldspace","_inventory","_hitPoints","_fuel","_damage","_key","_vehLimit","_hiveResponse","_objectCount","_codeCount","_data","_status","_val","_traderid","_retrader","_traderData","_id","_lockable","_debugMarkerPosition","_vehicle_0","_bQty","_vQty","_BuildingQueue","_objectQueue","_superkey","_shutdown","_res","_hiveLoaded","_ownerPUID"];
+private ["_nul","_result","_pos","_wsDone","_dir","_isOK","_countr","_objWpnTypes","_objWpnQty","_dam","_selection","_totalvehicles","_object","_idKey","_type","_ownerID","_worldspace","_intentory","_hitPoints","_fuel","_damage","_key","_vehLimit","_hiveResponse","_objectCount","_codeCount","_data","_status","_val","_traderid","_retrader","_traderData","_id","_lockable","_debugMarkerPosition","_vehicle_0","_bQty","_vQty","_BuildingQueue","_objectQueue","_superkey","_shutdown","_res","_hiveLoaded"];
 
 dayz_versionNo = 		getText(configFile >> "CfgMods" >> "DayZ" >> "version");
 dayz_hiveVersionNo = 	getNumber(configFile >> "CfgMods" >> "DayZ" >> "hiveVersion");
@@ -91,7 +91,7 @@ if (isServer && isNil "sm_done") then {
 		_ownerID = 		_x select 3;
 
 		_worldspace = 	_x select 4;
-		_inventory =	_x select 5;
+		_intentory =	_x select 5;
 		_hitPoints =	_x select 6;
 		_fuel =			_x select 7;
 		_damage = 		_x select 8;
@@ -101,12 +101,6 @@ if (isServer && isNil "sm_done") then {
 		_wsDone = false;
 		if (count _worldspace >= 2) then
 		{
-		
-			if ((typeName (_worldspace select 0)) == "STRING") then {
-				_worldspace set [0, call compile (_worldspace select 0)];
-				_worldspace set [1, call compile (_worldspace select 1)];
-			};
-		
 			_dir = _worldspace select 0;
 			if (count (_worldspace select 1) == 3) then {
 				_pos = _worldspace select 1;
@@ -121,16 +115,7 @@ if (isServer && isNil "sm_done") then {
 			diag_log ("MOVED OBJ: " + str(_idKey) + " of class " + _type + " to pos: " + str(_pos));
 		};
 		
-		// Realign characterID to OwnerPUID - need to force save though.
-		
-		if (count _worldspace < 3) then
-		{
-			_worldspace set [count _worldspace, "0"];
-		};		
-		_ownerPUID = _worldspace select 2;
-		
-		// diag_log format["Server_monitor: [ObjectID = %1]  [ClassID = %2] [_ownerPUID = %3]", _idKey, _type, _ownerPUID];
-		
+
 		if (_damage < 1) then {
 			//diag_log format["OBJ: %1 - %2", _idKey,_type];
 			
@@ -138,12 +123,11 @@ if (isServer && isNil "sm_done") then {
 			_object = createVehicle [_type, _pos, [], 0, "CAN_COLLIDE"];
 			_object setVariable ["lastUpdate",time];
 			_object setVariable ["ObjectID", _idKey, true];
-			_object setVariable ["OwnerPUID", _ownerPUID, true];
 			
 			if (typeOf (_object) == "Plastic_Pole_EP1_DZ") then {
-				_object setVariable ["plotfriends", _inventory, true];
+				_object setVariable ["plotfriends", _intentory, true];
 			};
-
+			
 			_lockable = 0;
 			if(isNumber (configFile >> "CfgVehicles" >> _type >> "lockable")) then {
 				_lockable = getNumber(configFile >> "CfgVehicles" >> _type >> "lockable");
@@ -196,17 +180,17 @@ if (isServer && isNil "sm_done") then {
 				
 			};
 
-			if ((count _inventory > 0) && !(typeOf( _object) == "Plastic_Pole_EP1_DZ")) then {
+			if ((count _intentory > 0) && !(typeOf( _object) == "Plastic_Pole_EP1_DZ")) then {
 				if (_type in DZE_LockedStorage) then {
 					// Fill variables with loot
-					_object setVariable ["WeaponCargo", (_inventory select 0),true];
-					_object setVariable ["MagazineCargo", (_inventory select 1),true];
-					_object setVariable ["BackpackCargo", (_inventory select 2),true];
+					_object setVariable ["WeaponCargo", (_intentory select 0),true];
+					_object setVariable ["MagazineCargo", (_intentory select 1),true];
+					_object setVariable ["BackpackCargo", (_intentory select 2),true];
 				} else {
 
 					//Add weapons
-					_objWpnTypes = (_inventory select 0) select 0;
-					_objWpnQty = (_inventory select 0) select 1;
+					_objWpnTypes = (_intentory select 0) select 0;
+					_objWpnQty = (_intentory select 0) select 1;
 					_countr = 0;					
 					{
 						if(_x in (DZE_REPLACE_WEAPONS select 0)) then {
@@ -220,8 +204,8 @@ if (isServer && isNil "sm_done") then {
 					} count _objWpnTypes; 
 				
 					//Add Magazines
-					_objWpnTypes = (_inventory select 1) select 0;
-					_objWpnQty = (_inventory select 1) select 1;
+					_objWpnTypes = (_intentory select 1) select 0;
+					_objWpnQty = (_intentory select 1) select 1;
 					_countr = 0;
 					{
 						if (_x == "BoltSteel") then { _x = "WoodenArrow" }; // Convert BoltSteel to WoodenArrow
@@ -234,8 +218,8 @@ if (isServer && isNil "sm_done") then {
 					} count _objWpnTypes;
 
 					//Add Backpacks
-					_objWpnTypes = (_inventory select 2) select 0;
-					_objWpnQty = (_inventory select 2) select 1;
+					_objWpnTypes = (_intentory select 2) select 0;
+					_objWpnQty = (_intentory select 2) select 1;
 					_countr = 0;
 					{
 						_isOK = 	isClass(configFile >> "CfgVehicles" >> _x);
@@ -276,7 +260,7 @@ if (isServer && isNil "sm_done") then {
 			//Monitor the object
 			PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_object];
 		};
-	} forEach (_BuildingQueue + _objectQueue);
+	} count (_BuildingQueue + _objectQueue);
 	// # END SPAWN OBJECTS #
 
 	// preload server traders menu data into cache
@@ -399,7 +383,9 @@ if (isServer && isNil "sm_done") then {
 		endLoadingScreen;
 	};
 
-	allowConnection = true;	
+	[] ExecVM "\z\addons\dayz_server\WAI\init.sqf";
+	
+	allowConnection = true;
 	sm_done = true;
 	publicVariable "sm_done";
 };
