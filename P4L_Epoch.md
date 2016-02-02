@@ -179,7 +179,7 @@ After that, add
 
 No more changes needed in this file. RESTORE TO THE NORMAL REMOVES.SQF
 	
-**STEP 7 (Modifying player_build.sqf, player_upgrade.sqf, and player_buildingDowngrade.sqf)**<br>
+**STEP 7 (Modifying player_build_plotCheck.sqf, player_upgrade.sqf, and player_buildingDowngrade.sqf)**<br>
 ALL THREE OF THESE FILES NEED THE SAME EDIT, MAKE SURE YOU DO ALL FILES!!!!<br>
 Find
 	
